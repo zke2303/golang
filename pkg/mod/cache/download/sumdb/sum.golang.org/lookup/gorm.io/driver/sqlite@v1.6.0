@@ -3,7 +3,7 @@ gorm.io/driver/sqlite v1.6.0 h1:WHRRrIiulaPiPFmDcod6prc4l2VGVWHz80KspNsxSfQ=
 gorm.io/driver/sqlite v1.6.0/go.mod h1:AO9V1qIQddBESngQUKWL9yoH93HIeA1X6V633rBwyT8=
 
 go.sum database tree
-46494209
-MRjqrqQHdf5+Fw0yo9c1MBK8UsqQfqfDPB2ETDfSDFU=
+46500818
+HPKh3iwr97QJzVDUuWxVpuD3lFPUowwx5BVRch/i1MQ=
 
-— sum.golang.org Az3grrohVe7qSiVXvbmm+nFH2HGwx1O0LkIJuBiWoVxJjSYf+6FzG/2Easxx4R5tgIRhUlobsIBJjVvts/t3EHKoIg8=
+— sum.golang.org Az3grjxZLlcFdTDtV4DnQEvqBMHm5WMB4X7SeCBKyyyzz/0CwairQx+Rbf1sIdBY+Olzw6e6V7OxVDwSRkNHQX11HAk=

@@ -1,15 +1,17 @@
 package model
 
-import "time"
+import (
+	"time"
+)
 
 type Employee struct {
-	ID         uint      `gorm:"primaryKey" json:"id"`
-	Username   string    `gorm:"size:40;unique" json:"username"`
-	Password   string    `gorm:"size:20" json:"password,omitempty"`
-	Nickname   string    `gorm:"size:20" json:"nickname"`
+	Id         uint64    `gorm:"primaryKey;autoIncrement" json:"id"`
+	Username   string    `gorm:"size:40;uniqueKey" json:"username"`
+	Password   string    `gorm:"size:20;" json:"password"`
+	NickName   string    `gorm:"size:30;" json:"nickName"`
 	Department string    `gorm:"size:20" json:"department"`
-	Gender     int8      `json:"gender"`
-	Age        int       `json:"age"`
-	CreateTime time.Time `gorm:"autoCreateTime" json:"create_time"`
-	UpdateTime time.Time `gorm:"autoUpdateTime" json:"update_time"`
+	Gender     int8      `gorm:"type:tinyint(2)" json:"gender"`
+	Age        uint8     `json:"age"`
+	CreateTime time.Time `gorm:"column:create_time" json:"createTime"`
+	UpdateTime time.Time `gorm:"column:update_time" json:"updateTime"`
 }
