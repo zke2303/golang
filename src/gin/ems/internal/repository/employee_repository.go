@@ -12,6 +12,9 @@ import (
 type EmployeeRepository interface {
 	FindById(id uint64) (model.Employee, error)
 	List(query request.EmployeeQuery) (response.PageResult[model.Employee], error)
+	Insert(e *model.Employee) error
+	Delete(id uint64) error
+	Update(m *model.Employee) error
 }
 
 type employeeRepository struct {
@@ -41,8 +44,8 @@ func (r *employeeRepository) List(q request.EmployeeQuery) (response.PageResult[
 		query = query.Where("username like ?", "%"+q.Username+"%")
 	}
 
-	if q.NickName != "" {
-		query = query.Where("nickname like ?", "%"+q.NickName+"%")
+	if q.Nickname != "" {
+		query = query.Where("nickname like ?", "%"+q.Nickname+"%")
 	}
 
 	if q.Department != "" {
@@ -87,4 +90,16 @@ func (r *employeeRepository) List(q request.EmployeeQuery) (response.PageResult[
 	page.Records = list
 
 	return page, nil
+}
+
+func (r *employeeRepository) Insert(e *model.Employee) error {
+	return r.db.Create(e).Error
+}
+
+func (r *employeeRepository) Delete(id uint64) error {
+	return r.db.Delete(&model.Employee{}, id).Error
+}
+
+func (r *employeeRepository) Update(m *model.Employee) error {
+	return r.db.Model(&model.Employee{}).Where("id = ?", m.Id).Updates(m).Error
 }

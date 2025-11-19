@@ -10,5 +10,8 @@ func EmployeeRouter(r *gin.Engine, h *handler.EmployeeHandler) {
 	{
 		employeeRouter.GET("/", h.FindById)
 		employeeRouter.GET("/list", h.List)
+		employeeRouter.POST("/", h.Insert)
+		employeeRouter.DELETE("/:id", h.Delete)
+		employeeRouter.PUT("/", h.Update)
 	}
 }

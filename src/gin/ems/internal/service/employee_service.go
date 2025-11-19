@@ -22,3 +22,16 @@ func (s EmployeeService) FindById(id uint64) (model.Employee, error) {
 func (s EmployeeService) List(query request.EmployeeQuery) (response.PageResult[model.Employee], error) {
 	return s.repository.List(query)
 }
+
+// Insert 往 employees 表中插入一条数据/*
+func (s EmployeeService) Insert(m *model.Employee) error {
+	return s.repository.Insert(m)
+}
+
+func (s EmployeeService) Delete(id uint64) error {
+	return s.repository.Delete(id)
+}
+
+func (s EmployeeService) Update(m *model.Employee) error {
+	return s.repository.Update(m)
+}

@@ -7,6 +7,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/zhang/bms/internal/model"
 	"github.com/zhang/bms/internal/service"
 	"github.com/zhang/bms/internal/transport/http/request"
 	"github.com/zhang/bms/internal/transport/http/response"
@@ -56,8 +57,9 @@ func (h EmployeeHandler) FindById(c *gin.Context) {
 func (h EmployeeHandler) List(c *gin.Context) {
 	// 1.将查询参数从请求中提取出来
 	var query request.EmployeeQuery
-	err := c.ShouldBindJSON(&query)
+	err := c.ShouldBindQuery(&query)
 	if err != nil {
+		fmt.Println(err)
 		response.Fail(c, http.StatusBadRequest, "JSON格式转换异常, 请检查请求参数")
 		return
 	}
@@ -75,4 +77,69 @@ func (h EmployeeHandler) List(c *gin.Context) {
 	}
 
 	response.Success(c, records)
+}
+
+func (h EmployeeHandler) Insert(c *gin.Context) {
+	// 1.从请求中获取数据, 并转换成 Employee结构体对象
+	var employee model.Employee
+	err := c.ShouldBindJSON(&employee)
+	if err != nil {
+		response.Fail(c, http.StatusBadRequest, "JSON转Employee错误")
+		return
+	}
+
+	// 2.调用service层方法
+	if err := h.service.Insert(&employee); err != nil {
+		response.Fail(c, http.StatusInternalServerError, "数据库插入数据失败")
+		return
+	}
+
+	// 3.成功插入数据
+	response.Success(c, nil)
+}
+
+func (h EmployeeHandler) Delete(c *gin.Context) {
+	// 1.从 gin.Context 中获取请求参数
+	strId := c.Param("id")
+	// 2.检查id是否为空
+	if strId == "" {
+		fmt.Println("id不能为空")
+		response.Fail(c, http.StatusBadRequest, "id不能为空")
+		return
+	}
+	// 3.将字符串转换成 uint64
+	id, err := strconv.ParseUint(strId, 10, 64)
+	if err != nil {
+		fmt.Println("请输入数字")
+		response.Fail(c, http.StatusBadRequest, "请输入数字")
+		return
+	}
+	// 4.调用 service 层
+	if err := h.service.Delete(id); err != nil {
+		response.Fail(c, http.StatusInternalServerError, "数据库删除记录错误")
+		return
+	}
+
+	// 5.返回删除成功给前端
+	response.Success(c, nil)
+}
+
+func (h EmployeeHandler) Update(c *gin.Context) {
+	// 1.从请求中获取参数
+	var employee model.Employee
+	if err := c.ShouldBindJSON(&employee); err != nil {
+		fmt.Println(err)
+		response.Fail(c, http.StatusBadRequest, "JSON转Employee错误")
+		return
+	}
+
+	// 2.调用service层方法
+	if err := h.service.Update(&employee); err != nil {
+		fmt.Println(err)
+		response.Fail(c, http.StatusInternalServerError, "数据库更新数据失败")
+		return
+	}
+
+	// 3.成功更新数据
+	response.Success(c, nil)
 }
