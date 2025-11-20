@@ -17,7 +17,7 @@ import (
 )
 
 func main() {
-	dbHost := "172.16.140.128"
+	dbHost := "192.168.138.128"
 	dbPort := "3306"
 	dbUsername := "root"
 	dbPassword := "123"

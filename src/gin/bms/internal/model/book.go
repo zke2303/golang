@@ -13,7 +13,7 @@ type Book struct {
 	Summary     string    `json:"summary"`
 	Category    uint32    `gorm:"tinyint" json:"category"`
 	Status      uint32    `gorm:"tinyint" json:"status"`
-	ISBN        string    `json:"ISBN"`
+	ISBN        string    `gorm:"size:13;uniqueIndex" json:"ISBN"`
 	Price       uint64    `json:"price"`
 	PublisherId uint64    `json:"publisher_id"`
 	PublishDate time.Time `json:"publish_date"`

@@ -6,25 +6,21 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/zhang/bms/internal/model"
+	"github.com/zhang/bms/internal/dto"
 	"github.com/zhang/bms/internal/service"
+	"github.com/zhang/bms/internal/transport/http/request"
 	"github.com/zhang/bms/internal/transport/http/response"
 )
 
-type IUserHandler interface {
-	FindById(c *gin.Context)
-	Create(context *gin.Context)
-}
-
-type UserHandlerImpl struct {
+type UserHandler struct {
 	s service.IUserService
 }
 
-func NewUserHandler(s service.IUserService) IUserHandler {
-	return &UserHandlerImpl{s: s}
+func NewUserHandler(s service.IUserService) UserHandler {
+	return UserHandler{s: s}
 }
 
-func (h *UserHandlerImpl) FindById(c *gin.Context) {
+func (h *UserHandler) FindById(c *gin.Context) {
 	// 1.从请求中获取参数Id
 	strId := c.Query("id")
 	// 2.转换成 uint64 类型
@@ -54,17 +50,17 @@ func (h *UserHandlerImpl) FindById(c *gin.Context) {
 	response.Success(c, user)
 }
 
-func (h *UserHandlerImpl) Create(c *gin.Context) {
+func (h *UserHandler) Create(c *gin.Context) {
 	// 1.从请求中获取参数, 并将JSON数据转换成 model.user对象
-	var user model.User
-	if err := c.ShouldBindJSON(&user); err != nil {
+	var userDTO dto.UserRequest
+	if err := c.ShouldBindJSON(&userDTO); err != nil {
 		fmt.Println("数据格式转换错误", err)
 		response.FailWithMsg(c, http.StatusBadRequest, "请检查数据格式")
 		return
 	}
 
 	// 2.调用service层方法
-	if err := h.s.Create(&user); err != nil {
+	if err := h.s.Create(&userDTO); err != nil {
 		// 实际开发中，这里可能需要判断 err 是“重复存在”还是“系统错误”
 
 		fmt.Println("创建用户失败:", err)
@@ -74,6 +70,69 @@ func (h *UserHandlerImpl) Create(c *gin.Context) {
 
 	// 3. 返回成功 (将生成的 ID 返回给前端)
 	// GORM 会自动把生成的 ID 填回 user 结构体中
-	response.Success(c, user)
+	response.Success(c, nil)
+}
 
+func (h *UserHandler) Delete(c *gin.Context) {
+	// 1.从请求中获取id
+	strId := c.Param("id")
+	// 2.将string类型的id转换成uint64
+	id, err := strconv.ParseUint(strId, 19, 64)
+
+	if err != nil {
+		fmt.Println("输入的id不是数字")
+		response.FailWithMsg(c, http.StatusBadRequest, "请输入数字")
+		return
+	}
+
+	// 3.调用service方法
+	if err := h.s.Delete(id); err != nil {
+		fmt.Println("删除用户数据失败")
+		response.FailWithMsg(c, http.StatusBadRequest, "删除失败")
+		return
+	}
+
+	// 4.返回删除成功
+	response.Success(c, nil)
+}
+
+func (h *UserHandler) Update(c *gin.Context) {
+	// 1.从请求中获取参数, 并将JSON数据转换成 model.user对象
+	var params struct {
+		ID uint64 `uri:"id" binding:"required"`
+	}
+
+	if err := c.ShouldBindUri(&params); err != nil {
+		fmt.Println("ID无效")
+		response.FailWithMsg(c, http.StatusBadRequest, "ID无效")
+		return
+	}
+
+	// 2.解析body
+	var req dto.UserUpdateRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		response.FailWithMsg(c, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	// 3.调用service
+	err := h.s.Update(params.ID, &req)
+	if err != nil {
+		response.FailWithMsg(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	response.Success(c, nil)
+}
+
+func (*UserHandler) PageQuery(c *gin.Context) {
+	// 1.从请求中获取分页参数
+	var page request.Page
+	if err := c.ShouldBindJSON(&page); err != nil{
+		fmt.Println("分页参数错误")
+		response.FailWithMsg(c, http.StatusBadRequest, "请检查页参数")
+		return
+	}
+
+	// 2.从请求中获取 query 参数
 }
