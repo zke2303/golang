@@ -1,6 +1,6 @@
 package request
 
 type Page struct {
-	Page     uint32 `json:"page"`
-	PageSize uint32 `json:"pageSize"`
+	Page     int `form:"page"`
+	PageSize int `form:"size"`
 }

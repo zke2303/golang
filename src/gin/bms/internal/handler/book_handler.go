@@ -138,19 +138,26 @@ func (h BookHandlerImpl) Update(c *gin.Context) {
 
 func (h BookHandlerImpl) PageQuery(c *gin.Context) {
 	var page request.Page
-	err := c.ShouldBindJSON(&page)
-	if err != nil {
-		fmt.Println("Page参数错误", err)
-		response.FailWithMsg(c, http.StatusBadRequest, "Page参数错误")
+	if err := c.ShouldBindQuery(&page); err != nil {
+		response.FailWithMsg(c, http.StatusBadRequest, "分页参数错误")
+		return
 	}
+
+	fmt.Println(page)
 
 	var query request.BookQuery
-	err = c.ShouldBindJSON(&query)
-	if err != nil {
-		fmt.Println("条件查询参数错误", err)
+	if err := c.ShouldBindQuery(&query); err != nil {
 		response.FailWithMsg(c, http.StatusBadRequest, "条件查询参数错误")
+		return
 	}
 
-	result := h.bookService.PageQuery(&page, &query)
+	fmt.Println(query)
 
+	pageResult, dbResult := h.bookService.PageQuery(&page, &query)
+	if dbResult != nil && dbResult.Error != nil {
+		response.FailWithMsg(c, http.StatusInternalServerError, dbResult.Error.Error())
+		return
+	}
+
+	response.Success(c, pageResult)
 }

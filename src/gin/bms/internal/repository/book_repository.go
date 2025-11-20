@@ -42,7 +42,55 @@ func (repo *BookRepositoryImpl) Update(b *model.Book) *gorm.DB {
 }
 
 func (repo *BookRepositoryImpl) PageQuery(page *request.Page, query *request.BookQuery) (response.PageResult, *gorm.DB) {
+	// 1. 构建基础查询 (只包含 Where 条件)
+	// 这个 tx 是干净的，包含所有的过滤条件
 	tx := buildDynamicWhere(repo.db, query)
+
+	// 2. 处理分页参数默认值 (防止 Size=0 导致查全表)
+	if page.Page <= 0 {
+		page.Page = 1
+	}
+	if page.PageSize <= 0 {
+		page.PageSize = 10 // 给一个默认值
+	}
+
+	// 3. 计算总数 (Count)
+	var total int64
+	// 【关键修复】：
+	// 使用 tx.Model(...) 而不是 tx.Find(...)。
+	// 注意：这里直接链式调用，不要把结果赋值回 tx，或者依赖返回值，这样不会污染原始 tx
+	if err := tx.Model(&model.Book{}).Count(&total).Error; err != nil {
+		return response.PageResult{}, repo.db // 返回错误
+	}
+
+	// 4. 查询数据列表 (List)
+	var books []model.Book
+
+	// 【关键修复】：
+	// 基于原始的 tx 构建一个新的查询对象 listTx
+	// 这样 buildPagination 里的 Offset/Limit 也是加在一个干净的基础上
+	listTx := buildPagination(tx, page)
+
+	if err := listTx.Find(&books).Error; err != nil {
+		return response.PageResult{}, repo.db
+	}
+
+	// 5. 组装返回结果
+	var pageResult response.PageResult
+	pageResult.Record = books
+	pageResult.Current = page.Page
+	pageResult.Size = page.PageSize
+	pageResult.Total = total
+
+	return pageResult, nil
+}
+
+// buildPagination 不需要改动，但在调用时要注意不要覆盖原始 tx
+func buildPagination(tx *gorm.DB, page *request.Page) *gorm.DB {
+	offset := (page.Page - 1) * page.PageSize
+	// 这里的 Session(&gorm.Session{}) 是可选的高级技巧，用于确保完全隔离，
+	// 但通常只要上面的 PageQuery 逻辑写对，这里直接返回 tx.Offset... 也是可以的。
+	return tx.Offset(offset).Limit(page.PageSize)
 }
 
 func buildDynamicWhere(tx *gorm.DB, query *request.BookQuery) *gorm.DB {

@@ -13,7 +13,7 @@ import (
 )
 
 func main() {
-	dbHost := "192.168.138.128"
+	dbHost := "172.16.140.128"
 	dbPort := "3306"
 	dbUsername := "root"
 	dbPassword := "123"
@@ -39,11 +39,11 @@ func main() {
 		return
 	}
 
-	db.AutoMigrate(
-		&model.Book{},
+	err = db.AutoMigrate(
 		&model.User{},
-		&model.Author{},
-		&model.Category{},
-		&model.Publisher{},
 	)
+	if err != nil {
+		fmt.Println("asdasdasd")
+		return
+	}
 }

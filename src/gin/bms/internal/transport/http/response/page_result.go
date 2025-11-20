@@ -1,8 +1,8 @@
 package response
 
 type PageResult struct {
-	Total   uint32      `json:"total"`
-	Current uint32      `json:"current"`
-	Size    uint32      `json:"size"`
+	Total   int64       `json:"total"`
+	Current int         `json:"current"`
+	Size    int         `json:"size"`
 	Record  interface{} `json:"record"`
 }

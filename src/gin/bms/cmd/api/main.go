@@ -17,7 +17,7 @@ import (
 )
 
 func main() {
-	dbHost := "192.168.138.128"
+	dbHost := "172.16.140.128"
 	dbPort := "3306"
 	dbUsername := "root"
 	dbPassword := "123"
@@ -47,9 +47,14 @@ func main() {
 	bookService := service.NewBookService(bookRepository)
 	bookHandler := handler.NewBookHandler(bookService)
 
+	userRepository := repository.NewUserRepository(db)
+	userService := service.NewUserService(userRepository)
+	userHandler := handler.NewUserHandler(userService)
+
 	r := gin.Default()
 
 	router.BootRouter(r, bookHandler)
+	router.UserRouter(r, userHandler)
 
 	if err := r.Run("localhost:8080"); err != nil {
 		fmt.Println("服务器启动失败")

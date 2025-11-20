@@ -3,13 +3,13 @@ package request
 import "time"
 
 type BookQuery struct {
-	Title       string    `gorm:"size:30" json:"title"`
-	AuthorId    int64     `json:"author_id"`
-	Category    uint32    `gorm:"tinyint" json:"category"`
-	Status      uint32    `gorm:"tinyint" json:"status"`
-	ISBN        string    `json:"ISBN"`
-	Price       uint64    `json:"price"`
-	PublisherId uint64    `json:"publisher_id"`
-	PublishDate time.Time `json:"publish_date"`
-	WordCount   uint16    `json:"word_count"`
+	Title       string    `gorm:"size:30" form:"title"`
+	AuthorId    int64     `form:"author_id"`
+	Category    uint32    `gorm:"tinyint" form:"category"`
+	Status      uint32    `gorm:"tinyint" form:"status"`
+	ISBN        string    `form:"ISBN"`
+	Price       uint64    `form:"price"`
+	PublisherId uint64    `form:"publisher_id"`
+	PublishDate time.Time `form:"publish_date"`
+	WordCount   uint16    `form:"word_count"`
 }
