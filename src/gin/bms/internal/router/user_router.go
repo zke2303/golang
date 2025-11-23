@@ -13,5 +13,6 @@ func UserRouter(c *gin.Engine, h handler.UserHandler) {
 		userRouter.DELETE("/:id", h.Delete)
 		userRouter.PUT("/:id", h.Update)
 		userRouter.POST("/page", h.PageQuery)
+		userRouter.POST("/login", h.Login)
 	}
 }

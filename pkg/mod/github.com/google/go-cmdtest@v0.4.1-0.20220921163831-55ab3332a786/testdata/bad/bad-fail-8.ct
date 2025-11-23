@@ -1,3 +1,0 @@
-# Command using Program
-
-$ echo-stdin -exit 1 --> FAIL 6

@@ -8,6 +8,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/zhang/bms/internal/handler"
+	"github.com/zhang/bms/internal/middleware"
 	"github.com/zhang/bms/internal/repository"
 	"github.com/zhang/bms/internal/router"
 	"github.com/zhang/bms/internal/service"
@@ -17,7 +18,7 @@ import (
 )
 
 func main() {
-	dbHost := "192.168.138.128"
+	dbHost := "192.168.15.128"
 	dbPort := "3306"
 	dbUsername := "root"
 	dbPassword := "123"
@@ -52,6 +53,13 @@ func main() {
 	userHandler := handler.NewUserHandler(userService)
 
 	r := gin.Default()
+
+	ignorePaths := []string{
+		"/user/login",
+		"/user/register",
+	}
+
+	r.Use(middleware.JwtAuthMiddleware(&ignorePaths))
 
 	router.BootRouter(r, bookHandler)
 	router.UserRouter(r, userHandler)

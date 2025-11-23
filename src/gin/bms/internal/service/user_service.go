@@ -4,6 +4,7 @@ import (
 	"github.com/zhang/bms/internal/dto"
 	"github.com/zhang/bms/internal/model"
 	"github.com/zhang/bms/internal/repository"
+	"github.com/zhang/bms/internal/utils"
 )
 
 type IUserService interface {
@@ -11,6 +12,7 @@ type IUserService interface {
 	Create(dto *dto.UserRequest) error
 	Delete(id uint64) error
 	Update(id uint64, req *dto.UserUpdateRequest) error
+	Login(login *dto.LoginDTO) (*string, error)
 }
 
 type UserServiceImpl struct {
@@ -19,6 +21,20 @@ type UserServiceImpl struct {
 
 func NewUserService(repo repository.IUserRepository) IUserService {
 	return &UserServiceImpl{repo: repo}
+}
+
+func (s *UserServiceImpl) Login(login *dto.LoginDTO) (*string, error) {
+	err := s.repo.Login(login)
+	if err != nil {
+		return nil, err
+	}
+	// 生成 token
+	token, err := utils.GeneratJwt(login.Username)
+	if err != nil {
+		return nil, err
+	}
+
+	return &token, nil
 }
 
 func (s *UserServiceImpl) FindById(id uint64) (*model.User, error) {

@@ -3,6 +3,7 @@ package repository
 import (
 	"errors"
 
+	"github.com/zhang/bms/internal/dto"
 	"github.com/zhang/bms/internal/model"
 	"gorm.io/gorm"
 )
@@ -12,6 +13,7 @@ type IUserRepository interface {
 	Create(dto *model.User) error
 	Delete(id uint64) error
 	Update(id uint64, data map[string]interface{}) error
+	Login(login *dto.LoginDTO) error
 }
 
 type UserRepositoryImpl struct {
@@ -22,6 +24,10 @@ func NewUserRepository(db *gorm.DB) IUserRepository {
 	return &UserRepositoryImpl{
 		db: db,
 	}
+}
+
+func (repo UserRepositoryImpl) Login(login *dto.LoginDTO) error {
+	return repo.db.Where("username = ?", login.Username).Where("password = ?", login.Password).First(&model.User{}).Error
 }
 
 func (repo UserRepositoryImpl) FindById(id uint64) (*model.User, error) {

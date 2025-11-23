@@ -20,6 +20,26 @@ func NewUserHandler(s service.IUserService) UserHandler {
 	return UserHandler{s: s}
 }
 
+func (h *UserHandler) Login(c *gin.Context) {
+	// 1.从请求头中获取username、password
+	var login dto.LoginDTO
+	err := c.Bind(&login)
+	if err != nil {
+		response.FailWithMsg(c, http.StatusBadRequest, "请输入账号和密码")
+		return
+	}
+
+	// 2.调用service层，校验登入
+	token, err := h.s.Login(&login)
+	if err != nil {
+		response.FailWithMsg(c, http.StatusBadRequest, "账号或密码错误")
+		return
+	}
+	// 3.登入成功，把token添加到gin.Context中
+	c.Set("username", login.Username)
+	response.Success(c, token)
+}
+
 func (h *UserHandler) FindById(c *gin.Context) {
 	// 1.从请求中获取参数Id
 	strId := c.Query("id")
@@ -128,7 +148,7 @@ func (h *UserHandler) Update(c *gin.Context) {
 func (*UserHandler) PageQuery(c *gin.Context) {
 	// 1.从请求中获取分页参数
 	var page request.Page
-	if err := c.ShouldBindJSON(&page); err != nil{
+	if err := c.ShouldBindJSON(&page); err != nil {
 		fmt.Println("分页参数错误")
 		response.FailWithMsg(c, http.StatusBadRequest, "请检查页参数")
 		return
