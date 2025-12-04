@@ -1,0 +1,13 @@
+package router
+
+import (
+	"github.com/gin-gonic/gin"
+	"github.com/zhang/bms/internal/controller"
+)
+
+func UserRouter(r *gin.Engine, c controller.UserController) {
+	userRouter := r.Group("/api/user")
+	{
+		userRouter.POST("", c.Insert)
+	}
+}
