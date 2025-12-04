@@ -1,0 +1,19 @@
+{"level":"info","time":"2025-12-04T14:46:27.118+0800","caller":"api/main.go:14","msg":"project starting...."}
+{"level":"info","time":"2025-12-04T14:58:19.266+0800","caller":"api/main.go:15","msg":"project starting...."}
+{"level":"info","time":"2025-12-04T14:58:27.103+0800","caller":"api/main.go:15","msg":"project starting...."}
+{"level":"info","time":"2025-12-04T16:32:42.545+0800","caller":"api/main.go:21","msg":"project starting...."}
+{"level":"info","time":"2025-12-04T16:33:00.152+0800","caller":"api/main.go:21","msg":"project starting...."}
+{"level":"info","time":"2025-12-04T16:33:48.008+0800","caller":"middleware/logger_middleware.go:23","msg":"/api/user","status":500,"method":"POST","path":"/api/user","query":"","ip":"::1","user-agent":"PostmanRuntime/7.29.0","error":"","cost":0.001747736}
+{"level":"info","time":"2025-12-04T16:34:45.211+0800","caller":"api/main.go:21","msg":"project starting...."}
+{"level":"info","time":"2025-12-04T16:34:47.656+0800","caller":"middleware/logger_middleware.go:23","msg":"/api/user","status":500,"method":"POST","path":"/api/user","query":"","ip":"::1","user-agent":"PostmanRuntime/7.29.0","error":"","cost":0.000756352}
+{"level":"info","time":"2025-12-04T16:40:18.713+0800","caller":"api/main.go:21","msg":"project starting...."}
+{"level":"info","time":"2025-12-04T16:40:21.847+0800","caller":"middleware/logger_middleware.go:23","msg":"/api/user","status":200,"method":"POST","path":"/api/user","query":"","ip":"::1","user-agent":"PostmanRuntime/7.29.0","error":"","cost":0.011900359}
+{"level":"info","time":"2025-12-04T16:44:22.801+0800","caller":"api/main.go:21","msg":"project starting...."}
+{"level":"info","time":"2025-12-04T16:44:32.995+0800","caller":"middleware/logger_middleware.go:22","msg":"request","status":200,"method":"POST","path":"/api/user","query":"","ip":"::1","user-agent":"PostmanRuntime/7.29.0","error":"","cost":0.01215144}
+{"level":"info","time":"2025-12-04T16:51:17.104+0800","caller":"middleware/logger_middleware.go:22","msg":"request","status":200,"method":"POST","path":"/api/user","query":"","ip":"::1","user-agent":"PostmanRuntime/7.29.0","error":"","cost":0.002304265}
+{"level":"info","time":"2025-12-04T16:51:17.786+0800","caller":"middleware/logger_middleware.go:22","msg":"request","status":200,"method":"POST","path":"/api/user","query":"","ip":"::1","user-agent":"PostmanRuntime/7.29.0","error":"","cost":0.0019441}
+{"level":"info","time":"2025-12-04T16:51:18.386+0800","caller":"middleware/logger_middleware.go:22","msg":"request","status":200,"method":"POST","path":"/api/user","query":"","ip":"::1","user-agent":"PostmanRuntime/7.29.0","error":"","cost":0.010935177}
+{"level":"info","time":"2025-12-04T16:51:18.814+0800","caller":"middleware/logger_middleware.go:22","msg":"request","status":200,"method":"POST","path":"/api/user","query":"","ip":"::1","user-agent":"PostmanRuntime/7.29.0","error":"","cost":0.011176927}
+{"level":"info","time":"2025-12-04T16:51:19.154+0800","caller":"middleware/logger_middleware.go:22","msg":"request","status":200,"method":"POST","path":"/api/user","query":"","ip":"::1","user-agent":"PostmanRuntime/7.29.0","error":"","cost":0.002094984}
+{"level":"info","time":"2025-12-04T16:55:29.466+0800","caller":"middleware/logger_middleware.go:22","msg":"request","status":500,"method":"POST","path":"/api/user","query":"","ip":"::1","user-agent":"PostmanRuntime/7.29.0","error":"","cost":0.00028123}
+{"level":"info","time":"2025-12-04T16:55:29.986+0800","caller":"middleware/logger_middleware.go:22","msg":"request","status":500,"method":"POST","path":"/api/user","query":"","ip":"::1","user-agent":"PostmanRuntime/7.29.0","error":"","cost":0.000232228}
