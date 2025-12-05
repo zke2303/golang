@@ -7,6 +7,7 @@ import (
 
 type IUserService interface {
 	Insert(user *model.User) error
+	Delete(id uint64) error
 }
 
 type UserServiceImpl struct {
@@ -21,4 +22,8 @@ func NewIUserService(repo repository.IUserRepository) IUserService {
 
 func (service UserServiceImpl) Insert(user *model.User) error {
 	return service.repo.Insert(user)
+}
+
+func (service UserServiceImpl) Delete(id uint64) error {
+	return service.repo.Delete(id)
 }

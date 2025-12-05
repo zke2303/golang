@@ -9,5 +9,6 @@ func UserRouter(r *gin.Engine, c controller.UserController) {
 	userRouter := r.Group("/api/user")
 	{
 		userRouter.POST("", c.Insert)
+		userRouter.DELETE("/:id", c.Delete)
 	}
 }

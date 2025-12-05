@@ -1,0 +1,14 @@
+datasource:
+  mysql:
+    host: 47.110.74.7
+    port: 3306
+    user: root
+    password: 123
+    database: bms
+
+server:
+  host: localhost
+  port: 8080
+
+logs:
+  path: "./logs/app.log"

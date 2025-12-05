@@ -18,6 +18,12 @@ func GinLogger() gin.HandlerFunc {
 		c.Next()
 
 		cost := time.Since(start)
+
+		var msg string
+		if v, exists := c.Get("msg"); exists {
+			msg, _ = v.(string) // 强制转为 string（如果不是 string，会是空字符串）
+		}
+
 		// 记录请求日志
 		logger.Log.Info("request",
 			zap.Int("status", c.Writer.Status()),
@@ -26,7 +32,7 @@ func GinLogger() gin.HandlerFunc {
 			zap.String("query", query),
 			zap.String("ip", c.ClientIP()),
 			zap.String("user-agent", c.Request.UserAgent()),
-			zap.String("error", c.Errors.ByType(gin.ErrorTypePrivate).String()),
+			zap.String("error", msg),
 			zap.Duration("cost", cost),
 		)
 	}
