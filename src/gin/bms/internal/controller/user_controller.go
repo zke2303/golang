@@ -22,6 +22,30 @@ func NewUserController(service service.IUserService) UserController {
 	}
 }
 
+// FindByUsername
+// 根据用户名查询用户信息
+func (ctl UserController) FindByUsername(c *gin.Context) {
+	// 1.从请求中获取用户名
+	username := c.Query("username")
+	if username == "" {
+		response.ErrorWithMsg(c, errcode.IllegalParams.Code, "Username cannot be empty.")
+		return
+	}
+
+	// 2.调用service层方法
+	user, err := ctl.service.FindByUsername(username)
+	if err != nil {
+		if errors.Is(err, errcode.NotFound) {
+			response.ErrorWithMsg(c, errcode.NotFound.Code, "用户名不存在")
+			return
+		}
+		response.ErrorWithMsg(c, errcode.InternalServerError.Code, err.Error())
+		return
+	}
+	// 3.返回查询结果
+	response.Success(c, user)
+}
+
 // Insert
 // 添加用户
 func (ctl UserController) Insert(c *gin.Context) {

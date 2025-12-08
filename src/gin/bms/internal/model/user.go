@@ -1,19 +1,13 @@
 package model
 
 import (
-	"time"
-
 	"gorm.io/gorm"
 )
 
 type User struct {
-	ID        uint `gorm:"primaryKey"`
-	CreatedAt time.Time
-	UpdatedAt time.Time
-	Username  string         `gorm:"type:varchar(20);not null;uniqueIndex:idx_username_del"`
-	DeletedAt gorm.DeletedAt `gorm:"uniqueIndex:idx_username_del"`
-
-	Password string `gorm:"type:varchar(20);not null"`
-	Gender   string `gorm:"default:male"`
-	Age      uint8
+	gorm.Model
+	Username string `json:"username" gorm:"column:username;not null;type:varchar(20)"`
+	Password string `json:"password" gorm:"column:password; not null;type:varchar(20)"`
+	Gender   string `json:"gender" gorm:"column:gender;default:male"`
+	Age      uint8  `json:"age" gorm:"column:age;"`
 }

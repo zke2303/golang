@@ -12,6 +12,7 @@ import (
 type IUserRepository interface {
 	Insert(user *model.User) error
 	Delete(id uint64) error
+	FindByUsername(username string) (*model.User, error)
 }
 
 type UserRepositoryImpl struct {
@@ -24,6 +25,19 @@ func NewIUserRepository(db *gorm.DB) IUserRepository {
 	}
 }
 
+// FindByUsername
+// 根据用户名查询用户信息
+func (repo UserRepositoryImpl) FindByUsername(username string) (*model.User, error) {
+	var user model.User
+	if err := repo.db.Where("username = ?", username).First(&user).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, errcode.NotFound
+		}
+		return nil, errcode.InternalServerError
+	}
+
+	return &user, nil
+}
 func (repo UserRepositoryImpl) Insert(user *model.User) error {
 	if err := repo.db.Create(user).Error; err != nil {
 		if errors.Is(err, gorm.ErrDuplicatedKey) {
