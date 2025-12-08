@@ -1,0 +1,27 @@
+# Build artifacts
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Go build output directories
+bin/
+/pkg/
+
+# Test binary
+*.test
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Database files
+*.db
+
+# Logger file
+*.log
